@@ -69,40 +69,28 @@ class Sudoku
     (0..80).each do |column|
       @data[column/9][column%9] = Element.new
       @data[column/9][column%9].location = column
+      @data[column/9][column%9].parent = self
     end
+    @frequencies_hash = {1=>0,2=>0,3=>0,4=>0,5=>0,6=>0,7=>0,8=>0,9=>0}
+  end
+  
+  def update_frequency(value)
+    @frequencies_hash[value] += 1
   end
   
   def frequencies
-    hash = {1=>0,2=>0,3=>0,4=>0,5=>0,6=>0,7=>0,8=>0,9=>0}
-    @data.flatten.each do |element|
-      if element.known?
-        hash[element.value] += 1
-      end
-    end
-    frequency_array = hash.sort { |a,b| b[1]<=>a[1] }
+    frequency_array = @frequencies_hash.sort { |a,b| b[1]<=>a[1] }
     frequency_array.delete_if { |i| i[1] == 9}
     frequency_array
   end
   
-  def value_locations(value)
-    locations = Array.new
-    (0..8).each do |row|
-      (0..8).each do |column|
-        if @data[row][column].value == value
-          locations << [row, column]
-        end
-      end
-    end
-    locations
-  end
-  
   def value_boxes(value)
     locations = Array.new
-    (0..8).each do |row|
-      (0..8).each do |column|
-        if @data[row][column].value == value
-          locations << [(row/3)*3, (column/3)*3]
-        end
+    (0..80).each do |location|
+      row = location/9
+      column = location%9
+      if @data[row][column].value == value
+        locations << [(row/3)*3, (column/3)*3]
       end
     end
     locations
@@ -175,6 +163,7 @@ end
 
 class Element
   attr_accessor :location
+  attr_accessor :parent
   
   def initialize
     @value = nil
@@ -222,6 +211,7 @@ class Element
     @possible.delete(value)
     if @possible.length == 1
       @value = @possible.first
+      @parent.update_frequency(@value)
       return @value
     end
     false

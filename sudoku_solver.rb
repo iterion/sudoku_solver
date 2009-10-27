@@ -21,11 +21,9 @@ class SudokuSolver
     (end_time - start_time)
   end
   
-  
   #Get list of unknown elements and send them to the checker with corresponding values
   def find_possible
-    unsolved = @sudoku.unsolved
-    unsolved.each do |current|
+    @sudoku.unsolved.each do |current|
       row = current.location/9
       column = current.location%9
       check = @sudoku.values_for_location(row, column)
@@ -66,9 +64,10 @@ class SudokuSolver
     branched
   end
   
+  #Find the boxes of the most frequently known values
+  #TODO: change to have a persistent frequency array
   def each_box
-    frequencies = @sudoku.frequencies
-    frequencies.each do |frequent|
+    @sudoku.frequencies.each do |frequent|
       most_frequent = frequent[0]
       locations = @sudoku.value_boxes(most_frequent)
       [0, 3, 6].each do |row|
