@@ -51,7 +51,10 @@ class Sudoku
   def sudoku_array=(sudoku)
     (0..8).each do |row|
       (0..8).each do |column|
-        @data[row][column].value = sudoku[row][column]
+        unless sudoku[row][column].nil?
+          @data[row][column].value = sudoku[row][column]
+          update_frequency(sudoku[row][column])
+        end
       end
     end
   end
