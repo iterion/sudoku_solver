@@ -73,18 +73,12 @@ class Sudoku
   end
   
   def frequencies
-    frequencies = (1..9).collect do |test|
-      count = 0
-      @data.flatten.each do |value|
-        if value.known?
-          if (value.value == test)
-            count = count + 1
-          end
-        end
+    hash = {1=>0,2=>0,3=>0,4=>0,5=>0,6=>0,7=>0,8=>0,9=>0}
+    @data.flatten.each do |element|
+      if element.known?
+        hash[element.value] += 1
       end
-      count
     end
-    hash = (1..9).zip(frequencies)
     frequency_array = hash.sort { |a,b| b[1]<=>a[1] }
     frequency_array.delete_if { |i| i[1] == 9}
     frequency_array
