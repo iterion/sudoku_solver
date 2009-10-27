@@ -1,0 +1,5 @@
+Sudoku Solver Application
+
+Bechmarker simply solves the same puzzle 1000.times
+
+The solver itself relies on the Sudoku and Element classes.  Both are defined in sudoku.rb
