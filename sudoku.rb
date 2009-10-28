@@ -59,6 +59,15 @@ class Sudoku
     end
   end
   
+  def from_dotted_line(line)
+    line.split(//).each_with_index do |element, index|
+      unless element == "." or index >= 81
+        @data[index/9][index%9].value = element.to_i
+        update_frequency(element.to_i)
+      end
+    end
+  end
+  
   def blank
     @data =  [[nil, nil, nil, nil, nil, nil, nil, nil, nil],
               [nil, nil, nil, nil, nil, nil, nil, nil, nil],
@@ -203,15 +212,23 @@ class Element
     unless value.nil?
       if((value >= 1) and (value <= 9))
         @value = value
-        @possible = []
+        @possible = [value]
       end
     else
       @value = nil
     end
   end
   
+  def possible=(value)
+    @possible = value
+  end
+  
   def remove_possible(value)
-    @possible.delete(value)
+    if @possible.length > 1
+      @possible.delete(value)
+    else
+      return false
+    end
     if @possible.length == 1
       @value = @possible.first
       @parent.update_frequency(@value)
