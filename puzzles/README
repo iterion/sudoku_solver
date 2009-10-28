@@ -1,0 +1,13 @@
+Puzzles
+
+Filename: sudoku.difficulty.number
+
+Format: 9 charachters per row, 9 rows
+        0 represents an unknown cell
+
+Puzzles obtained from: http://www.websudoku.com/
+    Easy - Level 0
+    Medium - Level 1
+    Hard - Level 2
+    Evil - Level 3
+
