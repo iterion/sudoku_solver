@@ -11,7 +11,7 @@ class SudokuCreator
 	def generate
 		#set initial 9 sudoku solutions
 		(1..9).each do |val|
-			temp = Sudoku.new
+			temp = Sudoku.new(true)
 			temp[0,0] = val
 			@sudokus.push(temp)
 		end
@@ -19,20 +19,25 @@ class SudokuCreator
 		(1..80).each do |n|
 			tempokus = Array.new
 			#@sudokus.each { |s| print s.to_ss }
-			(1..9).each do |val|
-				@sudokus.each do |sudoku|
-					temp = Sudoku.new(sudoku)
-					sudoku[n/9, n%9] = val
-					if temp.check_consistency
+			@sudokus.each do |sudoku|
+				(1..9).each do |val|
+					temp = Sudoku.new(true, sudoku)
+					if temp.check_consistency(n/9, n%9, val)
+						temp[n/9, n%9] = val
 						tempokus.push(temp)
-						print "Success: [#{n/9},#{n%9}]: #{val}" 
+#						print "Success: [#{n/9},#{n%9}]: #{val}" 
 					else
-						print "Fail [#{n/9},#{n%9}]: #{val}" 
+#						print "Fail [#{n/9},#{n%9}]: #{val}" 
 					end
 				end	
 			end
-			@sudokus = Array.new(tempokus)
-			@sudokus.each { |s| print s.to_ss }
+			@sudokus = Array.new
+			tempokus.each do |tempoku|
+				@sudokus.push(tempoku)
+			end
+			#@sudokus.each { |s| print s.to_s }
+			#gets
+			print "iteration #{n}: #{@sudokus.length}"
 		end
 	end
 end

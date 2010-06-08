@@ -1,9 +1,37 @@
 class Sudoku
-  
-  def initialize
-    blank
+  attr_accessor :data
+
+	def initialize(dumb = false, sudoku = nil)
+		if sudoku.nil?
+			if dumb
+				blank_no_element
+			else
+    		blank
+			end
+		else
+			@data = sudoku.data.collect do |row|
+				row.collect do |value|
+					value
+				end
+			end
+		end
   end
-  
+
+ 	def check_consistency(x,y,value)
+		remove_at = (x / 3) * ((y / 3) + 1)
+		temp_row = row(x)
+		temp_row.delete_at(y)
+		temp_column = column(y)
+		temp_column.delete_at(x)
+		temp_box = box(x,y)
+		temp_box.delete_at(remove_at)
+		if temp_row.index(value) or temp_column.index(value) or temp_box.index(value)
+			return false
+		else
+			return true
+		end
+	end
+
   def [](x, y)
     @data[x][y]
   end
@@ -68,7 +96,7 @@ class Sudoku
     end
   end
   
-  def blank
+  def blank_no_element
     @data =  [[nil, nil, nil, nil, nil, nil, nil, nil, nil],
               [nil, nil, nil, nil, nil, nil, nil, nil, nil],
               [nil, nil, nil, nil, nil, nil, nil, nil, nil],
@@ -78,6 +106,10 @@ class Sudoku
               [nil, nil, nil, nil, nil, nil, nil, nil, nil],
               [nil, nil, nil, nil, nil, nil, nil, nil, nil],
               [nil, nil, nil, nil, nil, nil, nil, nil, nil]]
+	end
+
+	def blank
+		blank_no_element
     (0..80).each do |column|
       @data[column/9][column%9] = Element.new
       @data[column/9][column%9].location = column
