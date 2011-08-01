@@ -37,10 +37,17 @@ class SudokuCreator
 			end
 			#@sudokus.each { |s| print s.to_s }
 			#gets
-			print "iteration #{n}: #{@sudokus.length}"
+			print "iteration #{n}: #{@sudokus.length}\n"
 		end
+	end
+
+	def print_all
+		@sudokus.each do |sudoku|
+			print (0..8).collect { |row| sudoku.row(row) }.flatten
+		end	
 	end
 end
 
 solution = SudokuCreator.new
 solution.generate
+solution.print_all
