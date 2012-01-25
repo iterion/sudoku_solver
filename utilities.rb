@@ -1,4 +1,5 @@
 #utility functions
+#add another comment
 class Numeric
   def square ; self * self ; end
 end
